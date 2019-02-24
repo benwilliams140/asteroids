@@ -10,6 +10,7 @@ py Main.py
 - Spaceship screen wrapping
 - Asteroid spawning
 - Progressive difficulty
+- Implemented shooting from the spaceship (Maximum of 5 bullets on screen)
 
 # TODO:
 - Implement menu system
