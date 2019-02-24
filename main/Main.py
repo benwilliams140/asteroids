@@ -56,12 +56,12 @@ class Main:
 					self.spaceship.turnRight()
 				if event.key == pygame.K_w:
 					self.spaceship.accelerateForwards()
-				if event.key == pygame.K_s:
-					self.spaceship.accelerateBackwards()
+				if event.key == pygame.K_SPACE:
+					self.spaceship.createBullet()
 			elif event.type == pygame.KEYUP:
 				if event.key == pygame.K_a or event.key == pygame.K_d:
 					self.spaceship.stopTurning()
-				if event.key == pygame.K_w or event.key == pygame.K_s:
+				if event.key == pygame.K_w:
 					self.spaceship.stopAccelerating()
 
 
@@ -73,7 +73,7 @@ class Main:
 		if self.gameState == "MENU":
 			print("menu")
 		elif self.gameState == "PLAYING":
-			self.spaceship.render(self.screen)
+			self.spaceship.render()
 			for asteroid in self.asteroids:
 				asteroid.render(self.screen)
 

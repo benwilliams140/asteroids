@@ -1,6 +1,8 @@
 import pygame
 import math
 
+from Bullet import Bullet
+
 class Spaceship:
 	def __init__(self, screen):
 		self.size = 30
@@ -25,10 +27,14 @@ class Spaceship:
 		self.screen = screen
 
 		self.acceleratingForwards = False
-		self.acceleratingBackwards = False
 
-	def render(self, screen):
-		screen.blit(pygame.transform.rotozoom(self.image, self.angle, self.size / 512), (self.x, self.y))
+		self.bullets = []
+
+	def render(self):
+		self.screen.blit(pygame.transform.rotozoom(self.image, self.angle, self.size / 512), (self.x, self.y))
+
+		for bullet in self.bullets:
+			bullet.render(self.screen)
 
 	def update(self):
 		self.x += self.dx
@@ -64,16 +70,20 @@ class Spaceship:
 			#self.ddy -= 0.1 * math.cos(math.radians(self.angle))
 			self.dx -= math.sin(math.radians(self.angle))
 			self.dy -= math.cos(math.radians(self.angle))
-		elif self.acceleratingBackwards:
-			#self.ddx += 0.1 * math.sin(math.radians(self.angle))
-			#self.ddy += 0.1 * math.cos(math.radians(self.angle))
-			self.dx -= math.sin(math.radians(self.angle))
-			self.dy -= math.cos(math.radians(self.angle))
 		else:
 			#self.ddx = 0
 			#self.ddy = 0
 			self.dx = 0
 			self.dy = 0
+
+		for bullet in self.bullets:
+			bullet.update()
+			if bullet.getX() < 0 or bullet.getX() > self.screen.get_width() or bullet.getY() < 0 or bullet.getY() > self.screen.get_height():
+				self.bullets.remove(bullet)
+
+	def isColliding(self, object):
+		#if self.x + self.size >= object.getX()
+		print("isColliding")
 
 	def turnRight(self):
 		self.turningRight = True
@@ -88,9 +98,9 @@ class Spaceship:
 	def accelerateForwards(self):
 		self.acceleratingForwards = True
 
-	def accelerateBackwards(self):
-		self.acceleratingBackwards = True
-
 	def stopAccelerating(self):
 		self.acceleratingForwards = False
-		self.acceleratingBackwards = False
+
+	def createBullet(self):
+		if len(self.bullets) < 5:
+			self.bullets.append(Bullet(self.x, self.y, self.angle, self.size))
